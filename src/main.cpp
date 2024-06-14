@@ -11,7 +11,6 @@
 #endif
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
-
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -49,7 +48,9 @@ int main(int, char**)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-    glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    glfwWindowHint(GLFW_FLOATING , GLFW_TRUE);
+
 #elif defined(__APPLE__)
     // GL 3.2 + GLSL 150
     const char* glsl_version = "#version 150";
@@ -80,8 +81,8 @@ int main(int, char**)
 
     // Create window with graphics context
     GLFWwindow* window = nullptr;
-    window = glfwCreateWindow(1200, 300, "Checkweigher", nullptr, nullptr);
-    glfwSetWindowMonitor(window, nullptr, 0, 400, 1280, 300, 50);
+    window = glfwCreateWindow(1200, 300, "Keyboard", nullptr, nullptr);
+    glfwSetWindowMonitor(window, nullptr, 0, 500, 1280, 300, 50);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
@@ -144,15 +145,16 @@ int main(int, char**)
 #endif
         io.AddMouseSourceEvent(ImGuiMouseSource_TouchScreen);
 
-        // Create dockspace
-        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-
         // ===================================
         // Main workspace
 
-	ImGui::Begin("Keyboard");
-	ImGui::Text("TestTestTest");
-	ImGui::End();
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(ImVec2(display_w, display_h));
+        ImGui::Begin("Keyboard", nullptr, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove);
+        ImGui::Button("TestTestTest");
+        ImGui::Button("TestTestTest");
+        ImGui::Button("TestTestTest");
+        ImGui::End();
 
         // End Main workspace
         // ===================================

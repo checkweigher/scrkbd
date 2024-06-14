@@ -1,6 +1,7 @@
 build/
 .vscode/
 imgui.ini
+scrkbd.ini
 layout-*.ini
 
 # cmake
