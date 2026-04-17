@@ -69,7 +69,9 @@ ADD_CUSTOM_COMMAND(
 # Your executable
 add_executable(scrkbd
     src/main.cpp
-    
+    src/virtual_keyboard.cpp
+    src/keyboard_layout.cpp
+
     ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
 )
 target_include_directories(scrkbd PUBLIC 
@@ -88,15 +90,20 @@ set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 # The destination directory is the build output directory (e.g., CMAKE_BINARY_DIR)
 set(ASSETS_DEST_DIR "${CMAKE_BINARY_DIR}/assets")
 
-# Add a custom command that copies the assets to the output directory
-add_custom_command(
-  TARGET scrkbd POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-          ${ASSETS_DIR}
-          ${ASSETS_DEST_DIR}
-  COMMENT "Copying assets to build directory"
-)
+# Add a custom command that copies the assets to the output directory (only
+# when the source folder exists; it's optional).
+if(EXISTS "${ASSETS_DIR}")
+    add_custom_command(
+      TARGET scrkbd POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+              ${ASSETS_DIR}
+              ${ASSETS_DEST_DIR}
+      COMMENT "Copying assets to build directory"
+    )
+endif()
 
 # Specify the target to install and the destination directory
 install(TARGETS scrkbd DESTINATION bin)
-install(DIRECTORY assets/ DESTINATION bin/assets)
+if(EXISTS "${ASSETS_DIR}")
+    install(DIRECTORY assets/ DESTINATION bin/assets)
+endif()
